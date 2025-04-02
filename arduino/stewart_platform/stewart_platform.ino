@@ -8,7 +8,9 @@ class Kinematics {
     float phi_base; // RADIANS
     float phi_platform; // RADIANS
 
-    InverseKinematics()
+    int InverseKinematics() {
+      return 3;
+    }
     
 
 
