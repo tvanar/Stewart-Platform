@@ -138,5 +138,5 @@ phi_p = 80  # Angle between platform joints
 # Create Stewart Platform instance
 platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 
-print(StewartPlatform.inverse_kinematics(platform, [0,0,1,0,0,0]))
+print(np.linalg.norm((StewartPlatform.inverse_kinematics(platform, [0,0.03,1,0,0,0])),axis=1))
 
