@@ -130,13 +130,13 @@ class StewartPlatform:
     
     
 # Define parameters
-r_b = 0.5  # Radius of base
+r_b = 100  # Radius of base
 phi_b = 50  # Angle between base joints
-r_p = 0.3  # Radius of platform
+r_p = 80  # Radius of platform
 phi_p = 80  # Angle between platform joints
 
 # Create Stewart Platform instance
 platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 
-print(np.linalg.norm((StewartPlatform.inverse_kinematics(platform, [0,0.03,1,0,0,0])),axis=1))
+print(np.linalg.norm((StewartPlatform.inverse_kinematics(platform, [0,0,1,5,0,0])),axis=1))
 
