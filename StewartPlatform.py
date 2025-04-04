@@ -140,3 +140,4 @@ platform = StewartPlatform(r_b, phi_b, r_p, phi_p)
 
 print(np.linalg.norm((StewartPlatform.inverse_kinematics(platform, [0,0,1,5,0,0])),axis=1))
 
+print(StewartPlatform.jacobian(platform))
