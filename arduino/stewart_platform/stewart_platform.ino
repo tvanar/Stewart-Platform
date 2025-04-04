@@ -1,4 +1,6 @@
-#include "kinematics.hpp"
+#include "kinematics_alt.hpp"
+#include <BasicLinearAlgebra.h>
+using namespace BLA;
 
 void setup() {
 
@@ -15,21 +17,20 @@ void setup() {
     
     
     Serial.println(m);
+
+    Serial.println(kinematics.getR());
     
     Serial.println(kinematics.getJacobian());
-    
-    Serial.print("Unit leg "); Serial.print(i); Serial.print(": ");
-    Serial.print(unit_legs[i](0)); Serial.print(", ");
-    Serial.print(unit_legs[i](1)); Serial.print(", ");
-    Serial.print(unit_legs[i](2)); Serial.println();
-    
-    Serial.print("Platform attachment "); Serial.print(i); Serial.print(": ");
-    Serial.print(platform_attachments[i](0)); Serial.print(", ");
-    Serial.print(platform_attachments[i](1)); Serial.print(", ");
-    Serial.print(platform_attachments[i](2)); Serial.println();
+
+    BLA::Matrix<3,6> m2 = kinematics.getUnitLegs();
+
+    Serial.println(m2);
+
+    Serial.println(kinematics.getLegs());
+
     
     }
-    
+  
     
     
     

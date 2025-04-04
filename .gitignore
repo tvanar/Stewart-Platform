@@ -1,1 +1,3 @@
 *.json
+*.ino
+!stewart_platform.ino

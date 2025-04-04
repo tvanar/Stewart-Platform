@@ -22,98 +22,111 @@ class Kinematics {
     float legs_length[6]; // L2 NORM OF LEGS
     BLA::Matrix<3,3> r; // ROTATION MATRIX
 
-
     // JACOBIAN MATRICES
     BLA::Matrix<6,6> jacobian;
     BLA::Matrix<6,6> jacobian_transpose;
     BLA::Matrix<6,6> j_star;
 
-  /* 
-  * Sets up the initial coordinates of the system
-  */
     void setUpPlatform() {
       for(int i = 0; i < NUM_LEGS; i++) {
         int j = (i % 2 == 1) ? -1 : 1;
-        Kinematics::base_attachments[i] = {base_radius * cos(angles_rad[i] + j * phi_base / 2.0f),base_radius * sin(angles_rad[i] + j * phi_base / 2.0f), 0.0f};
-        Kinematics::platform_attachments[i] = {platform_radius * cos(angles_rad[i] + j * phi_platform / 2.0f),platform_radius * sin(angles_rad[i] + j * phi_platform / 2.0f), 0.0f};
+        base_attachments[i] = {base_radius * cos(angles_rad[i] + j * phi_base / 2.0f), base_radius * sin(angles_rad[i] + j * phi_base / 2.0f), 0.0f};
+        platform_attachments[i] = {platform_radius * cos(angles_rad[i] + j * phi_platform / 2.0f), platform_radius * sin(angles_rad[i] + j * phi_platform / 2.0f), 0.0f};
       }
     }
 
-    /*
-    * Calculates the L2 norm of vec and inputs the result in leg_len
-    */
     float norm(BLA::Matrix<3,1> leg_vec) {
       return sqrt(leg_vec(0)*leg_vec(0) + leg_vec(1)*leg_vec(1) + leg_vec(2)*leg_vec(2)); 
     }
 
-    /*
-    * Calculate Rotation matrix and stores it in R
-    */
-    void rotationAsEuler(float angles[DIM]) {
-      float cz = cos(angles[0]), sz = sin(angles[0]);  // Z-axis rotation
-      float cy = cos(angles[1]), sy = sin(angles[1]);  // Y-axis rotation
-      float cx = cos(angles[2]), sx = sin(angles[2]);  // X-axis rotation
-      Kinematics::r = {cy*cz,cz*sx*sy - cx*sz,sx*sz + cx*cz*sy,
-                cy*sz,cx*cz + sx*sy*sz,cx*sy*sz - cz*sx,
-                -sy,cy*sx,cx*cy};
+    BLA::Matrix<3,1> cross(BLA::Matrix<3,1> a, BLA::Matrix<3,1> b) {
+      return {a(1)*b(2) - a(2)*b(1), a(2)*b(0) - a(0)*b(2), a(0)*b(1) - a(1)*b(0)};
     }
 
-    /*
-    * Calculates leg lengths based on a pose
-    */
+    void rotationAsEuler(float angles[DIM]) {
+      float cz = cos(angles[0]), sz = sin(angles[0]);  // Z-axis
+      float cy = cos(angles[1]), sy = sin(angles[1]);  // Y-axis
+      float cx = cos(angles[2]), sx = sin(angles[2]);  // X-axis
+
+      // Column-major initialization
+      r = {
+        // Column 0
+        cy*cz,
+        cz*sx*sy - cx*sz,
+        sx*sz + cx*cz*sy,
+        // Column 1
+        cy*sz,
+        cx*cz + sx*sy*sz,
+        cx*sy*sz - cz*sx,
+        // Column 2
+        -sy,
+        cy*sx,
+        cx*cy
+      };
+    }
+
     void inverseKinematics(float pose[NUM_LEGS]){
-      float euler_angles[3] = {pose[5],pose[4],pose[3]};
-      Kinematics::rotationAsEuler(euler_angles);
-      BLA::Matrix<3,1> pose_as_matrix = {pose[0],pose[1],pose[2]};
-      for(int i = 0;i < NUM_LEGS ;i++){
-        int j = (i % 2 == 1) ? -1 : 1;
-        Kinematics::base_attachments[i] = {base_radius * cos(angles_rad[i] + j * phi_base / 2.0f),base_radius * sin(angles_rad[i] + j * phi_base / 2.0f), 0.0f};
-        Kinematics::platform_attachments[i] = {platform_radius * cos(angles_rad[i] + j * phi_platform / 2.0f),platform_radius * sin(angles_rad[i] + j * phi_platform / 2.0f), 0.0f};
-        Kinematics::legs[i] = pose_as_matrix + (r * Kinematics::platform_attachments[i]) - Kinematics::base_attachments[i]; // Leg vectors
-        Kinematics::legs_length[i] = Kinematics::norm(legs[i]);
-        Kinematics::unit_legs[i] = legs[i] * (1/Kinematics::legs_length[i]);
-        Kinematics::platform_attachments[i] = Kinematics::legs[i] + Kinematics::base_attachments[i]; // Moving platform with respect to base
+      float euler_angles[3] = {pose[5], pose[4], pose[3]};
+      rotationAsEuler(euler_angles);
+      BLA::Matrix<3,1> pose_as_matrix = {pose[0], pose[1], pose[2]};
+      for(int i = 0; i < NUM_LEGS; i++){
+        legs[i] = pose_as_matrix + (r * platform_attachments[i]) - base_attachments[i];
+        legs_length[i] = norm(legs[i]);
+        unit_legs[i] = legs[i] / legs_length[i];
       }
     }
 
     void calculateJacobian() {
-      for(int i = 0;i < NUM_LEGS; i++) {
-        Matrix<3,1,float> cross_vector = BLA::CrossProduct(Kinematics::r*Kinematics::platform_attachments[i], Kinematics::unit_legs[i]);
-        Kinematics::jacobian(i,0) = unit_legs[i](0);
-        Kinematics::jacobian(i,1) = unit_legs[i](1);
-        Kinematics::jacobian(i,2) = unit_legs[i](2);
-        Kinematics::jacobian(i,3) = cross_vector(0);
-        Kinematics::jacobian(i,4) = cross_vector(1);
-        Kinematics::jacobian(i,5) = cross_vector(2);
+      for(int i = 0; i < NUM_LEGS; i++) {
+        Matrix<3,1> cross_vector = cross(r * platform_attachments[i], unit_legs[i]);
+        jacobian(i,0) = unit_legs[i](0);
+        jacobian(i,1) = unit_legs[i](1);
+        jacobian(i,2) = unit_legs[i](2);
+        jacobian(i,3) = cross_vector(0);
+        jacobian(i,4) = cross_vector(1);
+        jacobian(i,5) = cross_vector(2);
       }
     }
 
-
-    /*
-    * Constructor
-    */
-    Kinematics(float base_radius, float platform_radius, float phi_base, float phi_platform) : base_radius(base_radius), platform_radius(platform_radius), phi_base(phi_base), phi_platform(phi_platform) {
-      
+  public:
+    Kinematics(float base_radius, float platform_radius, float phi_base, float phi_platform) 
+      : base_radius(base_radius), platform_radius(platform_radius), phi_base(phi_base), phi_platform(phi_platform) {
+      setUpPlatform(); // Initialize attachments once
     }
 
-    //debug-method
     BLA::Matrix<6,1> runInverseKinematics(float pose[NUM_LEGS]) {
-      Kinematics::inverseKinematics(pose);
-      BLA::Matrix<6,1> m = {Kinematics::legs_length[0],Kinematics::legs_length[1],Kinematics::legs_length[2],Kinematics::legs_length[3],Kinematics::legs_length[4],Kinematics::legs_length[5]};
-      return m;
+      inverseKinematics(pose);
+      calculateJacobian(); // Ensure Jacobian is updated
+      return {legs_length[0], legs_length[1], legs_length[2], legs_length[3], legs_length[4], legs_length[5]};
     }
 
     BLA::Matrix<6,6> getJacobian() {
-      return jacobian;
-    }
-
-    BLA::Matrix<6,6> getUnitLegs() {
-      BLA::Matrix<3,6> m;
-      for(int i = 0; i < NUM_LEGS;i++) {
-        m(1,i) = Kinematics::unit_legs[] 
+        return jacobian;
       }
-    }
-
+  
+      BLA::Matrix<3,6> getUnitLegs() {
+        BLA::Matrix<3,6> m;
+        for(int i = 0; i < NUM_LEGS;i++) {
+          m(0,i) = Kinematics::unit_legs[i](0); 
+          m(1,i) = Kinematics::unit_legs[i](1); 
+          m(2,i) = Kinematics::unit_legs[i](2); 
+        }
+        return m;
+      }
+  
+      BLA::Matrix<6,3> getLegs() {
+        BLA::Matrix<6,3> m;
+        for(int i = 0;i < NUM_LEGS; i++) {
+          m(i,0) = Kinematics::legs[i](0); 
+          m(i,1) = Kinematics::legs[i](1); 
+          m(i,2) = Kinematics::legs[i](2);
+        }
+        return m;
+      }
+  
+      BLA::Matrix<3,3> getR() {
+        return Kinematics::r;
+      }
 };
 
 #endif
