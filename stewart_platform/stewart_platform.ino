@@ -14,12 +14,6 @@ void setup() {
     Kinematics kinematics(BASE_RADIUS, PLATFORM_RADIUS, PHI_BASE, PHI_PLATFORM);
     BLA::Matrix<6,1,double> m = kinematics.runInverseKinematics(POSE);
 
-    BLA::Matrix<6,6,double> m2 = kinematics.getJacobian();
-
-    Serial.println(m);
-
-    printM(m2);
-
     double legs[6] = {31.17,31.93,31.03,30.88,31.50,30.88};
     double guess[6] = {0.0,0.0,1.0,0.0826,0.0,0.0};
     

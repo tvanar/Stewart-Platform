@@ -126,12 +126,14 @@ class Kinematics {
       double euler_angles[3] = {pose[5], pose[4], pose[3]};
       rotationAsEuler(euler_angles,r);
       BLA::Matrix<3,1,double> pose_as_matrix = {pose[0], pose[1], pose[2]};
+      Kinematics::setUpPlatform();
       for(int i = 0; i < NUM_LEGS; i++){
         legs[i] = pose_as_matrix + (r * platform_attachments[i]) - base_attachments[i];
         legs_length[i] = norm(legs[i]);
         unit_legs[i] = legs[i] / legs_length[i];
+        platform_attachments[i] = legs[i] + base_attachments[i];
       }
-    }
+  }
 
     void calculateJacobian() {
       Matrix<3,1,double> cross_vector;
