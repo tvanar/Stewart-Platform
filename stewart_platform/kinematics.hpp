@@ -1,6 +1,7 @@
 #ifndef KINEMATICS
 #define KINEMATICS
 
+#include <Arduino.h>
 #include <math.h>
 #include <BasicLinearAlgebra.h>
 using namespace BLA;
@@ -11,7 +12,7 @@ const double angles_rad[6] = {0.0, 2.0943951, 2.0943951, 4.1887902, 4.1887902, 0
 
 // Constants for iteration
 const int MAX_INTERATIONS PROGMEM = 100;
-const double TOLERANCE PROGMEM = 1e-3;
+const double TOLERANCE PROGMEM = 0.1;
 const double ALPHA_POS PROGMEM = 0.2;
 const double ALPHA_ROT PROGMEM = 0.5;
 
@@ -46,7 +47,7 @@ class Kinematics {
     * JACOBIAN MATRICES
     */
     BLA::Matrix<6,6,double> jacobian;
-    BLA::Matrix<6,6,double> jacobian_transpose;
+    // BLA::Matrix<6,6,double> jacobian_transpose;
     BLA::Matrix<6,6,double> j_star; 
 
     void setUpPlatform() {
@@ -116,7 +117,9 @@ class Kinematics {
         psi = atan2(m(2,1)/cth,m(2,2)/cth);
         phi = atan2(m(1,0)/cth,m(0,0)/cth);
       }
-
+      est_pose(3) = psi;
+      est_pose(4) = theta;
+      est_pose(5) = phi;
     }
     
     /*
@@ -150,7 +153,6 @@ class Kinematics {
 
   public:
     double position[6] = {0,0,0,0,0,0};
-    int iter = 0;
     /*
     * CONSTRUCTOR
     */
@@ -189,7 +191,7 @@ class Kinematics {
     double error = 1 + TOLERANCE;
     double legs_est[6];
     BLA::Matrix<6,6,double> lambda = BLA::Eye<6,6,double>();
-    lambda = lambda * 0.001;
+    lambda = lambda * 0.0001;
     BLA::Matrix<3,1,double> x_delta_rot;
     BLA::Matrix<4,4,double> delta_T;
     BLA::Matrix<4,4,double> estimated_pose = est_pose;
@@ -207,18 +209,18 @@ class Kinematics {
         inverseKinematics(current_pose);
         
         for(int i = 0; i < NUM_LEGS; i++) {
-            legs_est[i] = Kinematics::legs_length[i];
-            delta_lengths(i) = measured_lengths[i]-legs_est[i];
+          delta_lengths(i) = measured_lengths[i]-legs_length[i];
         }
-        error = Kinematics::norm(delta_lengths);
+        // error = Kinematics::norm(delta_lengths);
         
         //calculate jacobian matrix
         Kinematics::calculateJacobian();
-        Kinematics::jacobian_transpose = ~Kinematics::jacobian;
+        // Kinematics::jacobian_transpose = ~Kinematics::jacobian;
         
         /* FIND DELTA_X from jacobian using pseudoinverse */
-        // Calculating psuedoinverse
-        Kinematics::j_star = BLA::Inverse(Kinematics::jacobian_transpose*Kinematics::jacobian + lambda)*Kinematics::jacobian_transpose;
+        // Calculating psuedoinverse (inverse)
+        // Kinematics::j_star = BLA::Inverse(Kinematics::jacobian_transpose*Kinematics::jacobian + lambda)*Kinematics::jacobian_transpose;
+        Kinematics::j_star = BLA::Inverse(Kinematics::jacobian);
         
         // Calculating delta_x
         delta_x = Kinematics::j_star*delta_lengths;
@@ -249,7 +251,6 @@ class Kinematics {
 
         error = Kinematics::norm(delta_lengths);
         count++;
-        iter++;
     }
 
     if(count < MAX_INTERATIONS) {
