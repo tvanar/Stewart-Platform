@@ -19,16 +19,20 @@ void setup() {
     BLA::Matrix<6,1,double> m = kinematics.runInverseKinematics(POSE);
     kinematics.calculateJacobian();
     double legs[6] = {3.39317,3.52455,3.32389,3.17716,3.11060,3.11783};
-    double guess[6] = {0.0,0.0,1.0,0.001,0.0,0.0};
+    double guess[6] = {0.0,0.0,1,0.01,0.0,0.0};
     
     // // printM(m);
+    unsigned long t1 = millis();
     kinematics.forwardKinematics(guess,legs);
-    
+    unsigned long t2 = millis();
+
     for(int i = 0;i < 6;i++) {
       Serial.print(kinematics.position[i],5);
       Serial.print(" ");
     }
-
+    
+    Serial.println("");
+    Serial.println(t2-t1);
     
   }
 
