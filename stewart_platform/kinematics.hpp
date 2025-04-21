@@ -12,7 +12,7 @@ const double angles_rad[6] = {0.0, 2.0943951, 2.0943951, 4.1887902, 4.1887902, 0
 
 // Constants for iteration
 const int MAX_INTERATIONS PROGMEM = 100;
-const double TOLERANCE PROGMEM = 0.1;
+const double TOLERANCE PROGMEM = 5;
 const double ALPHA_POS PROGMEM = 0.2;
 const double ALPHA_ROT PROGMEM = 0.5;
 
