@@ -6,7 +6,6 @@
 #include <BasicLinearAlgebra.h>
 #include "kinematics.hpp"
 #include <Keyboard.h>
-//Jag gör såhär att jag skriver all koden utan funktioner här först, gör sen om det till funktioner som kan kodas i hpp filen och bara använder de funktionerna här sen.
 
 //Set up our variables of the position and the angles.
 double x_val, y_val, z_val, roll, yaw, pitch; //deklarerar värdena på själva positionsvärdena och vinklarna.
