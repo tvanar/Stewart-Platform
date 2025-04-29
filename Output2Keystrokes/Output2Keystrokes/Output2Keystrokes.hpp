@@ -14,7 +14,7 @@ const double x_0, y_0, z_0, roll_0, yaw_0, pitch_0; //Sätter gränserna för n�
 
 void setupFunction() {
   Keyboard.begin(KeyboardLayout_sv_SE);//startar keyboard 
-  x_0 = 500;
+  x_0 = 500; //de här värdena ska jag ta från en vektor som kommer från Enars kod.
   y_0 = 500;
   z_0 = 500;
   roll_0 = 500;
