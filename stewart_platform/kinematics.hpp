@@ -165,6 +165,9 @@ class Kinematics {
     * Returns the position of the platform based on the lengths of the legs using Newton-Raphson.
     */
    bool forwardKinematics(double initial_guess[6], double measured_lengths[6]) {
+    for(int i = 0; i < 6;i++) {
+      position[i] = 0;
+    }
     // ROTATION based on guess
     double euler_angles[3] = {initial_guess[5], initial_guess[4], initial_guess[3]};
     rotationAsEuler(euler_angles, r);
