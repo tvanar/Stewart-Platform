@@ -1,5 +1,5 @@
 *.json
 *.ino
 !stewart_platform.ino
-.DS_Store
-.csv
+*.DS_Store
+*.csv
