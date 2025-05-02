@@ -2,3 +2,4 @@
 *.ino
 !stewart_platform.ino
 .DS_Store
+.csv
