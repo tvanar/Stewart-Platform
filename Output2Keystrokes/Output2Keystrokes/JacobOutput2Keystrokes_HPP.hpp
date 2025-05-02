@@ -26,3 +26,4 @@ void checkAndPress(double value, double threshold, char posKey, char negKey) {
     Keyboard.releaseAll(); 
   }
 }
+#endif
