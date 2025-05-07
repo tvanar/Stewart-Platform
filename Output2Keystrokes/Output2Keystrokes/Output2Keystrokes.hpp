@@ -1,10 +1,11 @@
+/*
 #ifndef Output2Keystrokes_HPP
 #define Output2Keystrokes_HPP
 
 #include <Arduino.h>
 #include <math.h>
-#include <BasicLinearAlgebra.h>
-#include "kinematics.hpp"
+//#include <BasicLinearAlgebra.h>
+//#include "kinematics.hpp"
 #include <Keyboard.h>
 
 //Set up our variables of the position and the angles.
@@ -70,3 +71,4 @@ void loopFunction() { // Here i will make a simple example to try out the concep
 //..på hur mycket åt höger vi går, desto mer frekvent ska tangenten tryckas.
 
 #endif
+*/
