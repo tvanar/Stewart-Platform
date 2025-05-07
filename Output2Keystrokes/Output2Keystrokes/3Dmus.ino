@@ -26,6 +26,7 @@ void setupFunction() {
 }
 
 void loopFunction() {
+  //ändra x_val och de andra
   // mappning av de olika valen
   checkAndPress(x_val, x_0, 'd', 'a');     // X+ = höger, X- = vänster
   checkAndPress(y_val, y_0, 'w', 's');     // Y+ = fram, Y- = bak
