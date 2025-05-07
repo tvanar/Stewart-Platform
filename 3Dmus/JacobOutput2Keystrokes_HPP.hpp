@@ -1,11 +1,19 @@
+/*
 #ifndef Output2Keystrokes_HPP
 #define Output2Keystrokes_HPP
+*/
+
+#ifndef JacobOutput2Keystrokes_HPP
+#define JacobOutput2Keystrokes_HPP
 
 #include <Arduino.h>
 #include <math.h>
-#include <BasicLinearAlgebra.h>
-#include "kinematics.hpp"
+//#include <BasicLinearAlgebra.h>
+//#include "kinematics.hpp"
 #include <Keyboard.h>
+
+const int MAX_DELAY = 1000; //1 sekund
+const int MIN_DELAY = 100;
 
 int computeDelay(double value, double threshold) {
   double delta = fabs(value) - threshold;
@@ -15,7 +23,10 @@ int computeDelay(double value, double threshold) {
 }
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
+  Serial.println("Hej");
+ 
   if (fabs(value) > threshold) {
+     delay(1000);
     int d = computeDelay(value, threshold);
     if (value > 0) {
       Keyboard.press(posKey);
@@ -26,4 +37,5 @@ void checkAndPress(double value, double threshold, char posKey, char negKey) {
     Keyboard.releaseAll(); 
   }
 }
+
 #endif
