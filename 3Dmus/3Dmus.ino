@@ -1,8 +1,8 @@
 //#ifndef Output2Keystrokes_HPP
 //#define Output2Keystrokes_HPP
 #include "JacobOutput2Keystrokes_HPP.hpp"
-#ifndef JacobOutput2Keystrokes_HPP
-#define JacobOutput2Keystrokes_HPP
+//#ifndef JacobOutput2Keystrokes_HPP
+//#define JacobOutput2Keystrokes_HPP
 
 #include <Arduino.h>
 #include <math.h>
@@ -20,6 +20,7 @@ double z_0 = 50;
 double roll_0 = 0;
 double yaw_0 = 0;
 double pitch_0 = 0;
+int hej = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -44,7 +45,12 @@ void setup() {
 }
 
 void loop() {
-  Serial.print("hej");
+  i = i + 1;
+  if(i < 100){
+    Serial.print("hej");
+
+  }
+  
   /*
   //ändra x_val och de andra
   // mappning av de olika valen
@@ -66,4 +72,4 @@ void loop() {
   checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
   */
 }
-#endif
+//#endif
