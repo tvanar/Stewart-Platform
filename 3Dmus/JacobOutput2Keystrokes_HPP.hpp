@@ -23,7 +23,10 @@ int computeDelay(double value, double threshold) {
 }
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
+  Serial.println("Hej");
+ 
   if (fabs(value) > threshold) {
+     delay(1000);
     int d = computeDelay(value, threshold);
     if (value > 0) {
       Keyboard.press(posKey);
