@@ -65,12 +65,14 @@ void loop() {
     Serial.readBytes(receivedBytes, 24);
     memcpy(position, receivedBytes, sizeof(position));
   }
+
   x_val = position[0];
   y_val = position[1];
   z_val = position[2]; //ändra x_val och de andra
   roll = position[3];
-  yaw = position[4];
-  pitch = position[5]; // mappning av de olika valen
+  pitch = position[4]; // mappning av de olika valen
+  yaw = position[5];
+  
   checkAndPress(x_val, x_0, 'd', 'a');     // X+ = höger, X- = vänster
   checkAndPress(y_val, y_0, 'w', 's');     // Y+ = fram, Y- = bak
   checkAndPress(z_val, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
