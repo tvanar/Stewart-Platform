@@ -20,7 +20,7 @@ def legLength(V_x):
 
 
 #setup
-ser = serial.Serial('COM4', 115200) 
+ser = serial.Serial('COM14', 115200) 
 p = kinematics.StewartPlatform()
 
 

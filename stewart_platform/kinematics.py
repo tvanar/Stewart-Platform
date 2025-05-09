@@ -115,5 +115,6 @@ class StewartPlatform:
         # print('num_iters: ',count)
         if count < max_count:
             self.pose_vect = est_pose_vect
+            
 
         return self.pose_vect

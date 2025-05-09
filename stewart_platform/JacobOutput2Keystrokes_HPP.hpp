@@ -29,7 +29,7 @@ int computeDelay(double value, double threshold) {
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
   if (fabs(value) > threshold) {
-     delay(100);
+     delay(10);
     int d = computeDelay(value, threshold);
     if (value > 0) {
       Keyboard.press(posKey);
