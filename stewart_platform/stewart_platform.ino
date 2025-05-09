@@ -66,20 +66,20 @@ void loop() {
     memcpy(position, receivedBytes, sizeof(position));
   }
 
-   x_val = position[0];
-  // y_val = position[1];
-  // z_val = position[2]; //ändra x_val och de andra
-  // roll = position[3];
-  // pitch = position[4]; // mappning av de olika valen
-  // yaw = position[5];
-  
-   //checkAndPress(x_val+15, x_0, 'w', 's');     // X+ = höger, X- = vänster
-   checkAndPress(y_val+20, y_0, 'a', 'd');     // Y+ = fram, Y- = bak
-  // checkAndPress(z_val, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
-  // checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
-  // checkAndPress(yaw, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
-  // checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
-  // mouseClick();
+  x_val = position[0];
+  y_val = position[1];
+  z_val = position[2]; //ändra x_val och de andra
+  roll = position[3];
+  pitch = position[4]; // mappning av de olika valen
+  yaw = position[5];
+
+  checkAndPress(x_val, x_0, 'd', 'a');     // X+ = höger, X- = vänster
+  checkAndPress(y_val, y_0, 'w', 's');     // Y+ = fram, Y- = bak
+  checkAndPress(z_val, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
+  checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
+  checkAndPress(yaw, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
+  checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
+  mouseClick(); // y = vänsterklick h = högerklick
 }
 
 
