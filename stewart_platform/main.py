@@ -51,7 +51,7 @@ while True:
     # Sending position
     position_32 = [np.float32(i) for i in position]
     data = struct.pack('6f', *position)
-    ser.write(data)
+    ser.write(data) 
     
     
 
