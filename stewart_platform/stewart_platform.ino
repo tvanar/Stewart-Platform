@@ -1,6 +1,7 @@
 #include <math.h>
 #include <Arduino.h>
 #include <BasicLinearAlgebra.h>
+#include "JacobOutput2Keystrokes_HPP.hpp"
 using namespace BLA;
 
 const int NUMLEGS = 6;
@@ -11,8 +12,21 @@ float voltages[NUMLEGS];
 int raw_voltage;
 int pin;
 float position[6]; 
+// Position och rotation (från vincent och einar)
+double x_val, y_val, z_val, roll, yaw, pitch;
+
+// threshhold (måste ändras till rimligt vinklar 0->360 i grader)
+double x_0 = 50;
+double y_0 = 50;
+double z_0 = 50;
+double roll_0 = 0;
+double yaw_0 = 0;
+double pitch_0 = 0;
+int hej = 0;
+double vector[6];
 
 void setup() {
+    Keyboard.begin(KeyboardLayout_sv_SE);
     Serial.begin(115200);
     analogReference(DEFAULT);
     for(int i = 0; i<NUMLEGS ;i++) {
@@ -50,7 +64,18 @@ void loop() {
     Serial.readBytes(receivedBytes, 24);
     memcpy(position, receivedBytes, sizeof(position));
   }
-  
+  x_val = position[0];
+  y_val = position[1];
+  z_val = position[2]; //ändra x_val och de andra
+  roll = position[3];
+  yaw = position[4];
+  pitch = position[5]; // mappning av de olika valen
+  checkAndPress(x_val, x_0, 'd', 'a');     // X+ = höger, X- = vänster
+  checkAndPress(y_val, y_0, 'w', 's');     // Y+ = fram, Y- = bak
+  checkAndPress(z_val, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
+  checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
+  checkAndPress(yaw, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
+  checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
 }
 
 
