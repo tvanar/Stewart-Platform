@@ -15,10 +15,10 @@
 const int MAX_DELAY = 1000; //1 sekund
 const int MIN_DELAY = 100;
 
-const int leftClickPin = 7;
-const int rightClickPin = 8;
 bool LRS = HIGH;
 bool LLS = HIGH;
+const int leftClickPin = 7;
+const int rightClickPin = 8;
 
 int computeDelay(double value, double threshold) {
   double delta = fabs(value) - threshold;
@@ -28,10 +28,8 @@ int computeDelay(double value, double threshold) {
 }
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
-  Serial.println("Hej");
- 
   if (fabs(value) > threshold) {
-     delay(1000);
+     delay(100);
     int d = computeDelay(value, threshold);
     if (value > 0) {
       Keyboard.press(posKey);

@@ -25,6 +25,7 @@ double pitch_0 = 0;
 int hej = 0;
 double vector[6];
 
+
 void setup() {
     Keyboard.begin(KeyboardLayout_sv_SE);
     Serial.begin(115200);
