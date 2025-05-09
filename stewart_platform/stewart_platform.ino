@@ -76,6 +76,7 @@ void loop() {
   checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
   checkAndPress(yaw, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
   checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
+  mouseClick();
 }
 
 
