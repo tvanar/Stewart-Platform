@@ -15,6 +15,12 @@
 const int MAX_DELAY = 1000; //1 sekund
 const int MIN_DELAY = 100;
 
+const int leftClickPin = 7;
+const int rightClickPin = 8;
+
+bool LRS = HIGH;
+bool LLS = HIGH;
+
 int computeDelay(double value, double threshold) {
   double delta = fabs(value) - threshold;
   if (delta <= 0) return 0;
@@ -23,8 +29,6 @@ int computeDelay(double value, double threshold) {
 }
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
-  Serial.println("Hej");
- 
   if (fabs(value) > threshold) {
      delay(1000);
     int d = computeDelay(value, threshold);
@@ -37,5 +41,26 @@ void checkAndPress(double value, double threshold, char posKey, char negKey) {
     Keyboard.releaseAll(); 
   }
 }
+
+void mouseClick(){
+  bool LS = digitalRead(leftClickPin);
+  bool RS = digitalRead(rightClickPin);
+
+  if (LS == LOW && LLS == HIGH) {
+    Keyboard.press('y'); 
+  }
+  if (LS == HIGH && LLS == LOW) {
+    Keyboard.release('y');
+  }
+  if (RS == LOW && LRS == HIGH) {
+    Keyboard.press('h');  // 
+  }
+  if (RS == HIGH && LRS == LOW) {
+    Keyboard.release('h');
+  }
+  LLS = LS;
+  LRS = RS;
+}
+
 
 #endif
