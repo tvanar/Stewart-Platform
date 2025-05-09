@@ -20,7 +20,11 @@ def legLength(V_x):
 
 
 #setup
+<<<<<<< Updated upstream
 ser = serial.Serial('COM14', 115200) 
+=======
+ser = serial.Serial('/dev/tty.usbmodemHIDPC1', 115200) 
+>>>>>>> Stashed changes
 p = kinematics.StewartPlatform()
 
 
