@@ -22,7 +22,6 @@ double z_0 = 50;
 double roll_0 = 0;
 double yaw_0 = 0;
 double pitch_0 = 0;
-int hej = 0;
 double vector[6];
 
 
