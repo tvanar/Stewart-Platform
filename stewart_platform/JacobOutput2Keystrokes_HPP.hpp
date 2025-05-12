@@ -11,14 +11,13 @@
 //#include <BasicLinearAlgebra.h>
 //#include "kinematics.hpp"
 #include <Keyboard.h>
+#include <Mouse.h>
 
 const int MAX_DELAY = 1000; //1 sekund
 const int MIN_DELAY = 100;
 
-bool LRS = HIGH;
-bool LLS = HIGH;
-const int leftClickPin = 7;
-const int rightClickPin = 8;
+const int leftClickPin = 8;
+const int rightClickPin = 7;
 
 int computeDelay(double value, double threshold) {
   double delta = fabs(value) - threshold;
@@ -29,7 +28,6 @@ int computeDelay(double value, double threshold) {
 
 void checkAndPress(double value, double threshold, char posKey, char negKey) {
   if (fabs(value) > threshold) {
-     delay(10);
     int d = computeDelay(value, threshold);
     if (value > 0) {
       Keyboard.press(posKey);
@@ -41,24 +39,21 @@ void checkAndPress(double value, double threshold, char posKey, char negKey) {
   }
 }
 
-void mouseClick(){
-  bool LS = digitalRead(leftClickPin);
-  bool RS = digitalRead(rightClickPin);
+void mouseClick() {
+  if (digitalRead(leftClickPin) == HIGH) {
+    Mouse.press(MOUSE_LEFT);
+    delay(100);
+    Mouse.release(MOUSE_LEFT);
+  }
 
-  if (LS == LOW && LLS == HIGH) {
-    Keyboard.press('y'); 
+  if (digitalRead(rightClickPin) == HIGH) {
+    Mouse.press(MOUSE_RIGHT);
+    delay(150);
+    Mouse.release(MOUSE_RIGHT);
   }
-  if (LS == HIGH && LLS == LOW) {
-    Keyboard.release('y');
-  }
-  if (RS == LOW && LRS == HIGH) {
-    Keyboard.press('h');  // 
-  }
-  if (RS == HIGH && LRS == LOW) {
-    Keyboard.release('h');
-  }
-  LLS = LS;
-  LRS = RS;
+
+  //delay(10);
 }
+
 
 #endif

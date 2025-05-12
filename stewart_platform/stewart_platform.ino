@@ -16,12 +16,12 @@ float position[6];
 double x_val, y_val, z_val, roll, yaw, pitch;
 
 // threshhold (måste ändras till rimligt vinklar 0->360 i grader)
-double x_0 = 20;
-double y_0 = 10;
-double z_0 = 50;
-double roll_0 = 0;
-double yaw_0 = 0;
-double pitch_0 = 0;
+double x_0 = 14;
+double y_0 = 20;
+double z_0 = 4;
+double roll_0 = 3;
+double yaw_0 = 5;
+double pitch_0 = 7;
 double vector[6];
 
 
@@ -32,6 +32,9 @@ void setup() {
     for(int i = 0; i<NUMLEGS ;i++) {
       pinMode(analog_pins[i],INPUT);
     }
+    pinMode(leftClickPin, INPUT_PULLUP);
+    pinMode(rightClickPin, INPUT_PULLUP);
+    Mouse.begin();
     while(!Serial);
     delay(10000);
   }
@@ -72,12 +75,12 @@ void loop() {
   pitch = position[4]; // mappning av de olika valen
   yaw = position[5];
 
-  checkAndPress(x_val, x_0, 'd', 'a');     // X+ = höger, X- = vänster
-  checkAndPress(y_val, y_0, 'w', 's');     // Y+ = fram, Y- = bak
-  checkAndPress(z_val, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
-  checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
-  checkAndPress(yaw, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
-  checkAndPress(pitch, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
+  checkAndPress(x_val+16, x_0, 'w', 's');     // X+ = fram, X- = bak godkänd
+ checkAndPress(y_val-4, y_0, 'a', 'd');     // Y+ = vänster, Y- = höger
+  checkAndPress(z_val-154, z_0, 'o', 'l');     // Z+ = upp, Z- = ner
+checkAndPress(roll, roll_0, 'q', 'e');   // Roll+ = medsold, Roll- = motsols
+ checkAndPress(pitch-7, yaw_0, 'u', 'j');     // Yaw+ = höger, Yaw- = vänster
+ //checkAndPress(yaw+2, pitch_0, 'i', 'k'); // Pitch+ = upp, Pitch- = ner
   mouseClick(); // y = vänsterklick h = högerklick
 }
 

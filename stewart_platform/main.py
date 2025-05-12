@@ -18,9 +18,8 @@ def legLength(V_x):
     return F
 
 
-
 #setup
-ser = serial.Serial('/dev/tty.usbmodemHIDPC1', 115200) 
+ser = serial.Serial('/dev/tty.usbmodemHIDFG1', 115200) 
 p = kinematics.StewartPlatform()
 
 # Initial Position
@@ -50,15 +49,4 @@ while True:
     # Sending position
     position_32 = [np.float32(i) for i in position]
     data = struct.pack('6f', *position)
-    ser.write(data) 
-    
-    
-
-    
-    
-    
-    
-    
-
-
-
+    ser.write(data)
